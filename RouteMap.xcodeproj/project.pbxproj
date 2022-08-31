@@ -82,6 +82,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F514FEE728BF68B500626233 /* Feed Feature  */ = {
+			isa = PBXGroup;
+			children = (
+				F514FEE528BF676600626233 /* FeedLoader.swift */,
+				F514FEE328BF662700626233 /* FeedItem.swift */,
+			);
+			path = "Feed Feature ";
+			sourceTree = "<group>";
+		};
 		F51E4E7B2897C7FC00972136 = {
 			isa = PBXGroup;
 			children = (
@@ -105,7 +114,7 @@
 		F51E4E862897C7FC00972136 /* RouteMap */ = {
 			isa = PBXGroup;
 			children = (
-				F514FEE328BF662700626233 /* FeedItem.swift */,
+				F514FEE728BF68B500626233 /* Feed Feature  */,
 				F51E4E872897C7FC00972136 /* AppDelegate.swift */,
 				F51E4E892897C7FC00972136 /* SceneDelegate.swift */,
 				F51E4E8B2897C7FC00972136 /* ViewController.swift */,
@@ -114,7 +123,6 @@
 				F51E4E952897C7FD00972136 /* LaunchScreen.storyboard */,
 				F51E4E982897C7FD00972136 /* Info.plist */,
 				F51E4E902897C7FC00972136 /* RouteMap.xcdatamodeld */,
-				F514FEE528BF676600626233 /* FeedLoader.swift */,
 			);
 			path = RouteMap;
 			sourceTree = "<group>";
