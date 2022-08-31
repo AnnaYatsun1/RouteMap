@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F514FEE428BF662700626233 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F514FEE328BF662700626233 /* FeedItem.swift */; };
+		F514FEE628BF676600626233 /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F514FEE528BF676600626233 /* FeedLoader.swift */; };
 		F51E4E882897C7FC00972136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51E4E872897C7FC00972136 /* AppDelegate.swift */; };
 		F51E4E8A2897C7FC00972136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51E4E892897C7FC00972136 /* SceneDelegate.swift */; };
 		F51E4E8C2897C7FC00972136 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51E4E8B2897C7FC00972136 /* ViewController.swift */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		F514FEE328BF662700626233 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
+		F514FEE528BF676600626233 /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
 		F51E4E842897C7FC00972136 /* RouteMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RouteMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F51E4E872897C7FC00972136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F51E4E892897C7FC00972136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				F51E4E952897C7FD00972136 /* LaunchScreen.storyboard */,
 				F51E4E982897C7FD00972136 /* Info.plist */,
 				F51E4E902897C7FC00972136 /* RouteMap.xcdatamodeld */,
+				F514FEE528BF676600626233 /* FeedLoader.swift */,
 			);
 			path = RouteMap;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F514FEE628BF676600626233 /* FeedLoader.swift in Sources */,
 				F51E4E8C2897C7FC00972136 /* ViewController.swift in Sources */,
 				F51E4E882897C7FC00972136 /* AppDelegate.swift in Sources */,
 				F51E4E922897C7FC00972136 /* RouteMap.xcdatamodeld in Sources */,
