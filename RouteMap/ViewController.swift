@@ -35,12 +35,7 @@ class FeedController: UIViewController {
         }
     }
 }
-struct FeedItem {
-    let id: UUID
-    let description: String?
-    let location: String?
-    let image: String
-}
+
 
 extension APIClient {
     func loadFeed(completion: ([FeedItem]) -> ()) {
