@@ -27,6 +27,7 @@ public final class RemoteFeedLoad {
     
     public func load(completion: @escaping (RemoteFeedLoad.Error) -> ()) {
         client.get(url: url) { error in
+            
             completion(.connectivity)
         }
     }
@@ -36,26 +37,25 @@ class RemoteFeedLoadTest: XCTestCase {
 
     func test_init_dosNotRequestDataFromUrl() {
         let (_, client) = mekeSUT()
-        XCTAssertNil(client.requestURL)
+        XCTAssertTrue(client.requestURL.isEmpty)
     }
 
     func test_load_requestDataFromUrl() {
         let url = URL(string: "http://given-url.com")!
         let (sut, client) = mekeSUT(url: url)
-        sut.load {_ in }
-        XCTAssertEqual(client.requestURL, url)
+        var capturesError = [RemoteFeedLoad.Error]()
+        sut.load { capturesError.append($0) }
+        XCTAssertEqual(client.requestURL, [url])
     }
     
     func test_load_deliversErrprOnClientError() {
         let (sut, client) = mekeSUT()
 
-        var captureError: RemoteFeedLoad.Error?
-        sut.load(completion: { error in
-            captureError = error
-        })
+        var captureError = [RemoteFeedLoad.Error?]()
+        sut.load { captureError.append($0) }
         let clientError = NSError(domain: "Test", code: 0)
-        client.completions[0](clientError)
-        XCTAssertEqual(captureError, .connectivity)
+        client.complite(error: clientError  )
+        XCTAssertEqual(captureError, [.connectivity])
     }
     
     private func mekeSUT(url: URL = URL(string: "http://a-given-url.com")!) -> (sut: RemoteFeedLoad, client: HTTPClientSpy) {
@@ -65,12 +65,20 @@ class RemoteFeedLoadTest: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
-        var requestURL: URL?
+        var requestURL: [URL] {
+            return masseges.map {
+                $0.url
+            }
+        }
         var error: Error?
         var completions = [(Error) -> ()]()
+        var masseges = [(url: URL, completion: (Error) -> ())]()
         func get(url: URL, completion: @escaping (Error) -> ()) {
-            completions.append(completion)
-            requestURL = url
+            masseges.append((url, completion))
+        }
+        
+        func complite(error: Error, index: Int = 0) {
+            masseges[index].completion(error)
         }
     }
 }
