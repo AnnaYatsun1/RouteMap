@@ -10,6 +10,7 @@
 		F514FEE428BF662700626233 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F514FEE328BF662700626233 /* FeedItem.swift */; };
 		F514FEE628BF676600626233 /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F514FEE528BF676600626233 /* FeedLoader.swift */; };
 		F514FEE928BF6A0100626233 /* RemoteFeedLoadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F514FEE828BF6A0100626233 /* RemoteFeedLoadTest.swift */; };
+		F514FEEC28BF8C6800626233 /* RemoteFeedLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F514FEEB28BF8C6800626233 /* RemoteFeedLoad.swift */; };
 		F51E4E882897C7FC00972136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51E4E872897C7FC00972136 /* AppDelegate.swift */; };
 		F51E4E8A2897C7FC00972136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51E4E892897C7FC00972136 /* SceneDelegate.swift */; };
 		F51E4E8C2897C7FC00972136 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51E4E8B2897C7FC00972136 /* ViewController.swift */; };
@@ -43,6 +44,7 @@
 		F514FEE328BF662700626233 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		F514FEE528BF676600626233 /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
 		F514FEE828BF6A0100626233 /* RemoteFeedLoadTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoadTest.swift; sourceTree = "<group>"; };
+		F514FEEB28BF8C6800626233 /* RemoteFeedLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoad.swift; sourceTree = "<group>"; };
 		F51E4E842897C7FC00972136 /* RouteMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RouteMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F51E4E872897C7FC00972136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F51E4E892897C7FC00972136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,14 @@
 			path = "Feed Feature ";
 			sourceTree = "<group>";
 		};
+		F514FEEA28BF8C3700626233 /* FeedAPI */ = {
+			isa = PBXGroup;
+			children = (
+				F514FEEB28BF8C6800626233 /* RemoteFeedLoad.swift */,
+			);
+			path = FeedAPI;
+			sourceTree = "<group>";
+		};
 		F51E4E7B2897C7FC00972136 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +126,7 @@
 		F51E4E862897C7FC00972136 /* RouteMap */ = {
 			isa = PBXGroup;
 			children = (
+				F514FEEA28BF8C3700626233 /* FeedAPI */,
 				F514FEE728BF68B500626233 /* Feed Feature  */,
 				F51E4E872897C7FC00972136 /* AppDelegate.swift */,
 				F51E4E892897C7FC00972136 /* SceneDelegate.swift */,
@@ -281,6 +292,7 @@
 				F514FEE628BF676600626233 /* FeedLoader.swift in Sources */,
 				F51E4E8C2897C7FC00972136 /* ViewController.swift in Sources */,
 				F51E4E882897C7FC00972136 /* AppDelegate.swift in Sources */,
+				F514FEEC28BF8C6800626233 /* RemoteFeedLoad.swift in Sources */,
 				F51E4E922897C7FC00972136 /* RouteMap.xcdatamodeld in Sources */,
 				F514FEE428BF662700626233 /* FeedItem.swift in Sources */,
 				F51E4E8A2897C7FC00972136 /* SceneDelegate.swift in Sources */,
