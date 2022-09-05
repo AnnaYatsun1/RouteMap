@@ -24,12 +24,17 @@ public final class RemoteFeedLoad {
         case connectivity
         case invalidate
     }
+    
+    public enum Result: Equatable {
+        case succes(FeedItem)
+        case failure(Error)
+    }
     public init(url: URL, client: HTTPClient) {
         self.client = client
         self.url = url
     }
     
-    public func load(completion: @escaping (RemoteFeedLoad.Error) -> ()) {
+    public func load(completion: @escaping (RemoteFeedLoad.Result) -> ()) {
         client.get(url: url) { rerult in
             switch rerult {
             case .succes:
@@ -90,10 +95,10 @@ class RemoteFeedLoadTest: XCTestCase {
     }
     
     private func execute(sut: RemoteFeedLoad, toCompliteWithError error: RemoteFeedLoad.Error, file: StaticString = #file, line: UInt = #line, action: () ->()) {
-        var captureError = [RemoteFeedLoad.Error?]()
-        sut.load { captureError.append($0) }
+        var captureResult = [RemoteFeedLoad.Result?]()
+        sut.load { captureResult.append($0) }
         action()
-        XCTAssertEqual(captureError, [error], file: file, line: line)
+        XCTAssertEqual(captureResult, [.failure(error)], file: file, line: line)
         
     }
     private class HTTPClientSpy: HTTPClient {
