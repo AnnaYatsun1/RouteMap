@@ -63,12 +63,13 @@ class RemoteFeedLoadTest: XCTestCase {
     
     func test_load_deliversErrprOn200HTTPResponce() {
         let (sut, client) = mekeSUT()
-
-        var captureError = [RemoteFeedLoad.Error?]()
-        sut.load { captureError.append($0) }
         
-        client.complite(withStatusCode: 400)
-        XCTAssertEqual(captureError, [.invalidate])
+        [199, 201, 300, 400, 500].enumerated().forEach { index, code in
+            var captureError = [RemoteFeedLoad.Error?]()
+            sut.load { captureError.append($0) }
+            client.complite(withStatusCode: code, index: index)
+            XCTAssertEqual(captureError, [.invalidate])
+        }
     }
     
     private func mekeSUT(url: URL = URL(string: "http://a-given-url.com")!) -> (sut: RemoteFeedLoad, client: HTTPClientSpy) {
