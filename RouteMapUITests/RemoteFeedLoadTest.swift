@@ -8,7 +8,7 @@
 import XCTest
 import RouteMap
 public enum HTTPClientResult {
-    case succes(HTTPURLResponse)
+    case succes(Data, HTTPURLResponse)
     case failure(Error)
 }
 
@@ -57,24 +57,31 @@ class RemoteFeedLoadTest: XCTestCase {
     
     func test_load_deliversErrprOnClientError() {
         let (sut, client) = mekeSUT()
-
-        var captureError = [RemoteFeedLoad.Error?]()
-        sut.load { captureError.append($0) }
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complite(error: clientError)
-        XCTAssertEqual(captureError, [.connectivity])
+        execute(sut: sut, toCompliteWithError: .connectivity) {
+            let clientError = NSError(domain: "Test", code: 0)
+            client.complite(error: clientError)
+        }
     }
     
     func test_load_deliversErrprOn200HTTPResponce() {
         let (sut, client) = mekeSUT()
         
         [199, 201, 300, 400, 500].enumerated().forEach { index, code in
-            var captureError = [RemoteFeedLoad.Error?]()
-            sut.load { captureError.append($0) }
-            client.complite(withStatusCode: code, index: index)
-            XCTAssertEqual(captureError, [.invalidate])
+            execute(sut: sut, toCompliteWithError: .invalidate) {
+                client.complite(withStatusCode: code, index: index)
+            }
         }
     }
+    
+    func test_deliverErrorOn200HTTPResponceWithInvalidJSON() {
+        let (sut, client) = mekeSUT()
+        execute(sut: sut, toCompliteWithError: .invalidate) {
+            let invalidJSON = Data(bytes: "Invalid JSOn".utf8)
+            client.complite(withStatusCode: 200, data: invalidJSON)
+        }
+    }
+    
+    // MARK: Helper
     
     private func mekeSUT(url: URL = URL(string: "http://a-given-url.com")!) -> (sut: RemoteFeedLoad, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
@@ -82,6 +89,13 @@ class RemoteFeedLoadTest: XCTestCase {
         return (sut, client)
     }
     
+    private func execute(sut: RemoteFeedLoad, toCompliteWithError error: RemoteFeedLoad.Error, file: StaticString = #file, line: UInt = #line, action: () ->()) {
+        var captureError = [RemoteFeedLoad.Error?]()
+        sut.load { captureError.append($0) }
+        action()
+        XCTAssertEqual(captureError, [error], file: file, line: line)
+        
+    }
     private class HTTPClientSpy: HTTPClient {
         var requestURL: [URL] {
             return masseges.map {
@@ -98,13 +112,13 @@ class RemoteFeedLoadTest: XCTestCase {
             masseges[index].completion(.failure(error))
         }
         
-        func complite(withStatusCode code: Int, index: Int = 0) {
+        func complite(withStatusCode code: Int, data: Data = Data(), index: Int = 0) {
             let responce = HTTPURLResponse(
                 url: requestURL[index],
                 statusCode: code,
                 httpVersion: nil,
                 headerFields: nil)!
-            masseges[index].completion(.succes(responce))
+            masseges[index].completion(.succes(data, responce))
         }
     }
 }
