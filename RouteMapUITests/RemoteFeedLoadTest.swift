@@ -7,10 +7,13 @@
 
 import XCTest
 import RouteMap
-
+public enum HTTPClientResult {
+    case succes(HTTPURLResponse)
+    case failure(Error)
+}
 
 public protocol HTTPClient {
-    func get(url: URL, completion: @escaping (Error?, HTTPURLResponse?) -> ())
+    func get(url: URL, completion: @escaping (HTTPClientResult) -> ())
 }
 
 public final class RemoteFeedLoad {
@@ -27,10 +30,11 @@ public final class RemoteFeedLoad {
     }
     
     public func load(completion: @escaping (RemoteFeedLoad.Error) -> ()) {
-        client.get(url: url) { error, responce in
-            if responce != nil {
+        client.get(url: url) { rerult in
+            switch rerult {
+            case .succes:
                 completion(.invalidate)
-            } else {
+            case .failure:
                 completion(.connectivity)
             }
         }
@@ -84,14 +88,14 @@ class RemoteFeedLoadTest: XCTestCase {
                 $0.url
             }
         }
-        var masseges = [(url: URL, completion: (Error?, HTTPURLResponse?) -> ())]()
+        var masseges = [(url: URL, completion: (HTTPClientResult) -> Void)]()
         
-        func get(url: URL, completion: @escaping (Error?, HTTPURLResponse?) -> ()) {
+        func get(url: URL, completion: @escaping (HTTPClientResult) -> Void) {
             masseges.append((url, completion))
         }
         
         func complite(error: Error, index: Int = 0) {
-            masseges[index].completion(error, nil)
+            masseges[index].completion(.failure(error))
         }
         
         func complite(withStatusCode code: Int, index: Int = 0) {
@@ -99,8 +103,8 @@ class RemoteFeedLoadTest: XCTestCase {
                 url: requestURL[index],
                 statusCode: code,
                 httpVersion: nil,
-                headerFields: nil)
-            masseges[index].completion(nil, responce)
+                headerFields: nil)!
+            masseges[index].completion(.succes(responce))
         }
     }
 }
