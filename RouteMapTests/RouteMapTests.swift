@@ -57,30 +57,19 @@ class RouteMapTests: XCTestCase {
     func test_deliverNotItem200HTTPResponceWithSONItems() {
         let (sut, client) = mekeSUT()
         
-        let item = FeedItem(
+        let item = makeItems(
             id: UUID(),
-            description: nil,
-            location: nil,
             imageUrl: URL(string: "https://a-url.com")!)
         
-        let item2 = FeedItem(
+        let item2 = makeItems(
             id: UUID(),
             description: "a description",
-            location: "a loication",
+            locaton: "a loication",
             imageUrl: URL(string: "https://a-url.com")!)
-        let item1FromJSON = [
-            "id": item.id.uuidString,
-            "image": item.imageUrl.absoluteString
-        ]
-        let item2FromJSON = [
-            "id": item2.id.uuidString,
-            "description": item2.description,
-            "location": item2.location,
-            "image": item2.imageUrl.absoluteString
-        ]
-        let itemsJSOn = ["items": [item1FromJSON, item2FromJSON]]
-        execute(sut: sut, toCompliteWithResult: .succes([item, item2])){
-            let json = try! JSONSerialization.data(withJSONObject: itemsJSOn)
+        
+        let items = [item.model, item2.model]
+        execute(sut: sut, toCompliteWithResult: .succes(items)){
+            let json = makesItemJSON(items: [item.json, item2.json])
             client.complite(withStatusCode: 200, data: json)
         }
     }
@@ -97,6 +86,27 @@ class RouteMapTests: XCTestCase {
         sut.load { captureResult.append($0) }
         action()
         XCTAssertEqual(captureResult, [result], file: file, line: line)
+        
+    }
+    
+    private func makeItems(id: UUID, description: String? = nil, locaton: String? = nil, imageUrl: URL) -> (model: FeedItem, json: [String: Any]){
+        let item = FeedItem(id: id, description: description, location: locaton, imageUrl: imageUrl)
+        let json = [
+            "id": id.uuidString,
+            "description": description,
+            "location": locaton,
+            "image": imageUrl.absoluteString
+        ].reduce(into: [String: Any]()) { (acc, e) in
+            if let value = e.value {
+                acc[e.key] = value
+            }
+        }
+        
+        return (item, json)
+    }
+    private func makesItemJSON(items: [[String: Any]]) -> Data {
+        let json = ["items": items]
+        return try! JSONSerialization.data(withJSONObject: json)
         
     }
     private class HTTPClientSpy: HTTPClient {
