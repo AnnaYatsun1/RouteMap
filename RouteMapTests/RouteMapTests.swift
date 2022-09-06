@@ -33,7 +33,8 @@ class RouteMapTests: XCTestCase {
         let (sut, client) = mekeSUT()
         [199, 201, 300, 400, 500].enumerated().forEach { index, code in
             execute(sut: sut, toCompliteWithResult: .failure(.invalidate)) {
-                client.complite(withStatusCode: code, index: index)
+                let json = makesItemJSON(items: [])
+                client.complite(withStatusCode: code, data: json, index: index)
             }
         }
     }
@@ -125,7 +126,7 @@ class RouteMapTests: XCTestCase {
             masseges[index].completion(.failure(error))
         }
         
-        func complite(withStatusCode code: Int, data: Data = Data(), index: Int = 0) {
+        func complite(withStatusCode code: Int, data: Data, index: Int = 0) {
             let responce = HTTPURLResponse(
                 url: requestURL[index],
                 statusCode: code,
@@ -166,8 +167,8 @@ public final class RemoteFeedLoad {
     public func load(completion: @escaping (RemoteFeedLoad.Result) -> ()) {
         client.get(url: url) { rerult in
             switch rerult {
-            case let .succes(data, _):
-                if let root = try? JSONDecoder().decode(Root.self, from: data) {
+            case let .succes(data, responce):
+                if responce.statusCode == 200, let root = try? JSONDecoder().decode(Root.self, from: data) {
                     completion(.succes(root.items))
                 } else {
                     completion(.failure(.invalidate))
