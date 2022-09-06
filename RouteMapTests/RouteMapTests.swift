@@ -54,6 +54,36 @@ class RouteMapTests: XCTestCase {
         }
     }
     
+    func test_deliverNotItem200HTTPResponceWithSONItems() {
+        let (sut, client) = mekeSUT()
+        
+        let item = FeedItem(
+            id: UUID(),
+            description: nil,
+            location: nil,
+            imageUrl: URL(string: "https://a-url.com")!)
+        
+        let item2 = FeedItem(
+            id: UUID(),
+            description: "a description",
+            location: "a loication",
+            imageUrl: URL(string: "https://a-url.com")!)
+        let item1FromJSON = [
+            "id": item.id.uuidString,
+            "image": item.imageUrl.absoluteString
+        ]
+        let item2FromJSON = [
+            "id": item2.id.uuidString,
+            "description": item2.description,
+            "location": item2.location,
+            "image": item2.imageUrl.absoluteString
+        ]
+        let itemsJSOn = ["items": [item1FromJSON, item2FromJSON]]
+        execute(sut: sut, toCompliteWithResult: .succes([item, item2])){
+            let json = try! JSONSerialization.data(withJSONObject: itemsJSOn)
+            client.complite(withStatusCode: 200, data: json)
+        }
+    }
     // MARK: Helper
     
     private func mekeSUT(url: URL = URL(string: "http://a-given-url.com")!) -> (sut: RemoteFeedLoad, client: HTTPClientSpy) {
@@ -127,8 +157,8 @@ public final class RemoteFeedLoad {
         client.get(url: url) { rerult in
             switch rerult {
             case let .succes(data, _):
-                if let _ = try? JSONSerialization.jsonObject(with: data) {
-                    completion(.succes([]))
+                if let root = try? JSONDecoder().decode(Root.self, from: data) {
+                    completion(.succes(root.items))
                 } else {
                     completion(.failure(.invalidate))
                 }
@@ -137,4 +167,7 @@ public final class RemoteFeedLoad {
             }
         }
     }
+}
+struct Root: Decodable {
+    let items: [FeedItem]
 }
