@@ -169,7 +169,7 @@ public final class RemoteFeedLoad {
             switch rerult {
             case let .succes(data, responce):
                 if responce.statusCode == 200, let root = try? JSONDecoder().decode(Root.self, from: data) {
-                    completion(.succes(root.items))
+                    completion(.succes(root.items.map { $0.item } ))
                 } else {
                     completion(.failure(.invalidate))
                 }
@@ -179,6 +179,33 @@ public final class RemoteFeedLoad {
         }
     }
 }
+
 struct Root: Decodable {
-    let items: [FeedItem]
+   fileprivate let items: [Item]
+}
+
+private struct Item: Decodable {
+    let id: UUID
+    let description: String?
+    let location: String?
+    let image: URL
+    
+    var item: FeedItem {
+        return FeedItem(id: id, description: description, location: location, imageUrl: image)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case image
+        case description
+        case location
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(UUID.self, forKey: .id)
+        description = try? values.decode(String.self, forKey: .description)
+        location = try? values.decode(String.self, forKey: .location)
+        image = try values.decode(URL.self, forKey: .image)
+    }
 }
